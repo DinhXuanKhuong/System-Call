@@ -129,7 +129,7 @@ sys_sysinfo(void)
 
   if (copyout(myproc()->pagetable, addr, (char *)&in4, sizeof(in4)) < 0) // copy back information for user space
   {
-    return -1;
+    return -1; // if < 0 return failed (-1)
   }
 
   return 0;
