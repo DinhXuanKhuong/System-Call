@@ -80,3 +80,20 @@ kalloc(void)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
 }
+
+uint64 getFreemem(void)
+{
+  struct run *freeList;
+  int cntFreeList = 0;
+
+  acquire(&kmem.lock); // Lock the free list (avoid race conditions)
+  for (freeList = kmem.freelist; freeList != 0; freeList = freeList->next) // Traverse the free list and count 
+  {
+    cntFreeList++; 
+  }
+
+  release(&kmem.lock);
+
+  return cntFreeList * PGSIZE; // PGSIZE = 4096 bytes in xv6
+}
+

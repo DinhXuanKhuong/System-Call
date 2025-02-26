@@ -6,6 +6,10 @@
 #include "spinlock.h"
 #include "proc.h"
 
+
+
+#include "sysinfo.h" // for sysinfo
+
 uint64
 sys_exit(void)
 {
@@ -90,4 +94,43 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+// our lab
+
+uint64
+sys_trace(void)
+{
+  int mask;
+
+  // mask from int main in trace.c will store the argument[1] from user space (for example is 32) into register a0 base on convention, 
+  // so use argint(0, &mask) that load the value of a0 to mask
+  argint(0, &mask);
+
+  // myproc() return current process, so assigment
+  myproc()->trace_mask = mask;
+
+  // okay, from now, if any system calls got this mask (which reference from #define SYS_) 
+  // will be traced by be printed information when syscall() function be called.
+  return 0;
+}
+
+uint64
+sys_sysinfo(void)
+{
+  struct sysinfo in4;
+
+  in4.freemem = getFreemem();
+  in4.nopenfiles = getNopenFiles();
+  in4.nprocess = getNproc();
+
+  uint64 addr;
+  argaddr(0, &addr); // extract the address of in4 from user space
+
+  if (copyout(myproc()->pagetable, addr, (char *)&in4, sizeof(in4)) < 0) // copy back information for user space
+  {
+    return -1;
+  }
+
+  return 0;
 }

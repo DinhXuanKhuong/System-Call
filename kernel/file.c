@@ -180,3 +180,20 @@ filewrite(struct file *f, uint64 addr, int n)
   return ret;
 }
 
+
+
+uint64 
+getNopenFiles(void) // just like getFreeMem()
+{
+    int count = 0;
+    struct file *f;
+
+    acquire(&ftable.lock);  // Lock the file table (to prevent race conditions)
+    for (f = ftable.file; f < &ftable.file[NFILE]; f++) {
+        if (f->ref > 0)  //  If file has references, it is open
+            count++;
+    }
+    release(&ftable.lock);  //  Unlock after counting
+
+    return count;
+}

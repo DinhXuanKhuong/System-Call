@@ -302,6 +302,7 @@ fork(void)
   // Cause fork to return 0 in the child.
   np->trapframe->a0 = 0;
 
+  
   // increment reference counts on open file descriptors.
   for(i = 0; i < NOFILE; i++)
     if(p->ofile[i])
@@ -311,6 +312,9 @@ fork(void)
   safestrcpy(np->name, p->name, sizeof(p->name));
 
   pid = np->pid;
+
+  // child inherit trace_mask from parent
+  np->trace_mask = p->trace_mask;
 
   release(&np->lock);
 
@@ -692,4 +696,20 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+
+uint64
+getNproc(void)
+{
+  uint64 cntNproc = 0;
+  struct proc *p;
+  for (p = proc; p < &proc[NPROC]; p++)
+  {
+    if(p->state != UNUSED)
+    {
+      cntNproc++;  // Count not UNUSED process
+    }
+  }
+  return cntNproc;
 }
