@@ -76,12 +76,15 @@ kalloc(void)
     kmem.freelist = r->next;
   release(&kmem.lock);
 
-  if(r)
+
+  if(r) {
     memset((char*)r, 5, PGSIZE); // fill with junk
+  }
+  
   return (void*)r;
 }
 
-uint64 getFreemem(void)
+uint64 getFreemem(void) // nfree
 {
   struct run *freeList;
   int cntFreeList = 0;
@@ -96,4 +99,3 @@ uint64 getFreemem(void)
 
   return cntFreeList * PGSIZE; // PGSIZE = 4096 bytes in xv6
 }
-

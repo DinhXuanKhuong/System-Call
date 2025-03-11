@@ -195,5 +195,5 @@ getNopenFiles(void) // just like getFreeMem()
     }
     release(&ftable.lock);  //  Unlock after counting
 
-    return count;
+    return count; // number of open file
 }

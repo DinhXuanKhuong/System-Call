@@ -686,13 +686,16 @@ procdump(void)
   char *state;
 
   printf("\n");
-  for(p = proc; p < &proc[NPROC]; p++){
-    if(p->state == UNUSED)
+  for(p = proc; p < &proc[NPROC]; ++p){
+    if(p->state == UNUSED) {
       continue;
-    if(p->state >= 0 && p->state < NELEM(states) && states[p->state])
+    }
+    if(p->state >= 0 && p->state < NELEM(states) && states[p->state]) {
       state = states[p->state];
-    else
+    }
+    else {
       state = "???";
+    } 
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }

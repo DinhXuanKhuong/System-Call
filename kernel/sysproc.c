@@ -6,8 +6,6 @@
 #include "spinlock.h"
 #include "proc.h"
 
-
-
 #include "sysinfo.h" // for sysinfo
 
 uint64
