@@ -132,10 +132,12 @@ extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 
-// our lab
+// our lab1
 extern uint64 sys_trace(void);
 extern uint64 sys_sysinfo(void);
 
+// our lab2
+extern uint64 sys_pgaccess(void);
 
 
 
@@ -166,6 +168,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
 [SYS_sysinfo] sys_sysinfo,
+[SYS_pgaccess] sys_pgaccess,
 };
 
 void

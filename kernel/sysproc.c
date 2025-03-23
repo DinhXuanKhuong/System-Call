@@ -132,3 +132,56 @@ sys_sysinfo(void)
 
   return 0;
 }
+
+int sys_pgaccess(void) {
+  uint64 start;
+  int npages;
+  uint64 abitsaddr;
+  uint64 va;
+  uint64 mask;
+  uint32 abits;  // Changed to uint32 to match user-space
+  int page_num;
+
+  struct proc *p = myproc();
+  argaddr(0, &start);
+  argint(1, &npages);
+  argaddr(2, &abitsaddr);
+
+  // printf("sys_pgaccess: start=%p, npages=%d, abitsaddr=%p\n", start, npages, abitsaddr);
+
+  if (npages > 64) {
+    // printf("npages too large: %d\n", npages);
+    return -1;
+  }
+
+  mask = 1;
+  abits = 0;
+  page_num = 0;
+  printf("sys_pgaccess: checking pages for start=%p, npages=%d\n", (void*)start, npages);
+  
+  for (va = start; va < start + PGSIZE * npages; va += PGSIZE) {
+    pte_t *pte = walk(p->pagetable, va, 0);
+    if (pte == 0) {
+      // printf("walk failed for va=%p\n", va);
+      printf("sys_pgaccess: walk failed for va=%p (page %d)\n", (void*)va, page_num);
+      return -1;
+    }
+    // printf("va=%p, pte=%p, pte_val=%p\n", (void*)va, (void*)pte, *pte);
+    if (*pte & PTE_A) {
+      // printf("PTE_A set for va=%p\n", va);
+      printf("sys_pgaccess: page %d accessed (va=%p)\n", page_num, (void*)va);
+      abits |= mask;
+      *pte = *pte & (~PTE_A);
+    }
+    mask <<= 1;
+    page_num++;
+  }
+
+  // printf("abits=%x\n", abits);
+  if (copyout(p->pagetable, abitsaddr, (char *)&abits, sizeof(uint32)) < 0) {
+    printf("copyout failed\n");
+    return -1;
+  }
+  return 0;
+}
+
