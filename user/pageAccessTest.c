@@ -16,81 +16,34 @@ void pgaccess_test() {
   uint64 abits;
   printf("pgaccess_test starting\n");
   testname = "pgaccess_test";
-  buf = malloc(32 * PGSIZE);
+  int NumberOfPage = 32; // how many pages to test in one time
+  buf = malloc(NumberOfPage * PGSIZE);
   if (buf == 0)
-    err("malloc failed");
-   //----------- 
-  // printf("buf allocated at %p\n", buf);
-  //------------
-  
+    err("malloc failed");  
   // First call to clear any stale PTE_A bits
-  if (pgaccess(buf, 32, &abits) < 0)
+  if (pgaccess(buf, NumberOfPage, &abits) < 0)
     err("pgaccess failed");
 
-//-------------- debugging zone
-  //   printf("After malloc, accessed pages:");
-  //   for (int i = 0; i < 32; i++) {
-  //     if (abits & (1 << i)) {
-  //       printf(" %d", i);
-  //     }
-  //   }
-  //   printf("\n");
-
-
-  //   char *dummy = malloc(64 * PGSIZE);
-  //   if (dummy == 0)
-  //     err("dummy malloc failed");
-  //   printf("dummy allocated at %p\n", dummy);
-  //   for (int i = 0; i < 64; i++) {
-  //     dummy[i * PGSIZE] = 1;
-  //   }
-
-  // // Check access bits after dummy access
-  // if (pgaccess(buf, 32, &abits) < 0)
-  // err("pgaccess failed");
-  // printf("After dummy access, accessed pages:");
-  // for (int i = 0; i < 32; i++) {
-  // if (abits & (1 << i)) {
-  //   printf(" %d", i);
-  // }
-  // }
-  // printf("\n");
-
-  // free(dummy);
-
-  // // Check access bits after free(dummy)
-  // if (pgaccess(buf, 32, &abits) < 0)
-  // err("pgaccess failed");
-  // printf("After free(dummy), accessed pages:");
-  // for (int i = 0; i < 32; i++) {
-  // if (abits & (1 << i)) {
-  //   printf(" %d", i);
-  // }
-  // }
-  // printf("\n");    
-
-
-// -------------------
   // Access pages 1, 2, and 25
   buf[PGSIZE * 1] += 1;
   buf[PGSIZE * 2] += 1;
   buf[PGSIZE * 25] += 1;
 
   // Second call to check accessed pages
-  if (pgaccess(buf, 32, &abits) < 0)
+  if (pgaccess(buf, NumberOfPage, &abits) < 0)
     err("pgaccess failed");
 
   // Print the list of accessed pages
   printf("Accessed pages:");
-  for (int i = 0; i < 32; i++) {
-    if (abits & (1 << i)) {
+  for (int i = 0; i < NumberOfPage; i++) {
+    if (abits & (1L << i)) {
       printf(" %d", i);
     }
   }
   printf("\n");
 
   // Check the bitmask
-  if (abits != ((1 << 1) | (1 << 2) | (1 << 25)))
+  if (abits != ((1L << 1) | (1L << 2) | (1L << 7)))
     err("incorrect access bits set");
 
   free(buf);

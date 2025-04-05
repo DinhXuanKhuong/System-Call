@@ -139,7 +139,7 @@ uint64 sys_pgaccess(void) {
   uint64 abitsaddr;
   uint64 va;
   uint64 mask;
-  uint32 abits;  // Changed to uint32 to match user-space
+  uint64 abits;  
   int page_num;
 
   struct proc *p = myproc();
