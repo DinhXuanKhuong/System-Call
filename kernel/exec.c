@@ -7,6 +7,15 @@
 #include "defs.h"
 #include "elf.h"
 
+int custom_strcmp(const char *s1, const char *s2) {
+  while (*s1 && (*s1 == *s2)) {
+      s1++;
+      s2++;
+  }
+  return (unsigned char)*s1 - (unsigned char)*s2;
+}
+
+
 static int loadseg(pde_t *, uint64, struct inode *, uint, uint);
 
 int flags2perm(int flags)
@@ -30,12 +39,9 @@ exec(char *path, char **argv)
   struct proghdr ph;
   pagetable_t pagetable = 0, oldpagetable;
   struct proc *p = myproc();
-  // vm_print_flag = 0
+  int print_pgt = 0; // Print page table flag
 
-  /*
-  vm 
-  
-  */
+
   begin_op();
 
   if((ip = namei(path)) == 0){
@@ -92,6 +98,22 @@ exec(char *path, char **argv)
   sp = sz;
   stackbase = sp - USERSTACK*PGSIZE;
 
+  // Check for "-printpgt" in arguments and remove it if found
+for (int i = 0; argv[i]; i++) 
+{
+  if (custom_strcmp(argv[i], "-printpgt") == 0) 
+  {
+    print_pgt = 1;
+    // Shift argv to remove "-printpgt"
+    for (int j = i; argv[j]; j++) 
+    {
+      argv[j] = argv[j + 1];
+    }
+    break;
+  }
+}
+
+
   // Push argument strings, prepare rest of stack in ustack.
   for(argc = 0; argv[argc]; argc++) {
     if(argc >= MAXARG)
@@ -118,7 +140,13 @@ exec(char *path, char **argv)
   // argc is returned via the system call return
   // value, which goes in a0.
   p->trapframe->a1 = sp;
-  // if(flag == true)
+
+  // Print page table if flag != 0
+  if(print_pgt)
+    vmprint(p->pagetable);
+
+
+
   // Save program name for debugging.
   for(last=s=path; *s; s++)
     if(*s == '/')
