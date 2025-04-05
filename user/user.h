@@ -10,6 +10,7 @@ int read(int, void*, int);
 int close(int);
 int kill(int);
 int exec(const char*, char**);
+int exec_vmprint(const char*, char**);
 int open(const char*, int);
 int mknod(const char*, short, short);
 int unlink(const char*);

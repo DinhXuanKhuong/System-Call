@@ -60,3 +60,7 @@ After running the prompt from 'Step 1', run this following prompt to check which
 pageAccessTest
 ```
 
+if you want to print page table just go with vmprint
+example: 
+    wc README (not show page table)
+=>  vmprint wc README (show page table)

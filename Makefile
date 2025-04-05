@@ -197,6 +197,7 @@ UPROGS=\
 	$U/_trace\
 	$U/_sysinfotest\
 	$U/_pageAccessTest\
+	$U/_vmprint\
 
 
 
