@@ -18,12 +18,14 @@
 
 ## 1. Print a page table
 
-we got two solutions. 
+- we got two solutions. 
+```bash
 Example: wc README (not show print table)
     1/ $ vmprint wc README
     2/ $ wc README -printpgt
     
     both will print page table
+```
 
 ## 2. Detect which pages have been accsessed
 - In the terminal (shell), run the following prompt to debug which pages have been accessed:
