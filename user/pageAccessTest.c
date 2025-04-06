@@ -43,7 +43,7 @@ void pgaccess_test() {
   printf("\n");
 
   // Check the bitmask
-  if (abits != ((1L << 1) | (1L << 2) | (1L << 7)))
+  if (abits != ((1L << 1) | (1L << 2) | (1L << 25)))
     err("incorrect access bits set");
 
   free(buf);
