@@ -454,7 +454,7 @@ void vmPrintRec(pagetable_t pageTable, int level) {
   if (!pageTable)
       return;
   
-  for (int i = 0; i < PGSIZE / sizeof(pte_t); ++i) { // there are normally 512 PTEs in a page table
+  for (int i = 0; i < PGSIZE / sizeof(pte_t); ++i) { // There are 512 PTEs in a page table
       pte_t pte = pageTable[i];
       if (pte & PTE_V) { // Only print valid entries
           uint64 pa = PTE2PA(pte);
@@ -462,7 +462,7 @@ void vmPrintRec(pagetable_t pageTable, int level) {
               printf(" ..");
               // if(i != level) printf(" ");
             }
-          // print to the screen PTE and physical address
+          // Print to the screen PTE and physical address
           printf("%d: pte %p pa %p", i, (void *)pte, (void *)pa);
 
           
@@ -484,5 +484,5 @@ void vmPrintRec(pagetable_t pageTable, int level) {
 
 void vmprint(pagetable_t pagetable) {
   printf("Page table: %p\n", pagetable);
-  vmPrintRec(pagetable, 1);
+  vmPrintRec(pagetable, 0);
 }
