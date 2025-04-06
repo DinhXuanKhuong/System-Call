@@ -18,26 +18,12 @@
 
 ## 1. Print a page table
 
-- ✅ Tính năng 1
-- ✅ Tính năng 2
-- ✅ Tính năng 3
-- ⚙️ Dễ dàng tùy chỉnh
-- 🌐 Hỗ trợ đa ngôn ngữ (nếu có)
-
-```bash
-# Clone repository
-git clone https://github.com/your-username/your-project.git
-
-# Di chuyển vào thư mục dự án
-cd your-project
-
-# Cài đặt dependencies
-npm install
-
-# Khởi chạy project
-npm start
-```
-
+we got two solutions. 
+Example: wc README (not show print table)
+    1/ $ vmprint wc README
+    2/ $ wc README -printpgt
+    
+    both will print page table
 
 ## 2. Detect which pages have been accsessed
 - In the terminal (shell), run the following prompt to debug which pages have been accessed:
