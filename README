@@ -49,18 +49,5 @@ riscv64-softmmu.  Once they are installed, and in your shell
 search path, you can run "make qemu".
 
 
-## How to run lab2
-### Step 1:
-```bash
-make qemu
-```
-### Step 2:
-After running the prompt from 'Step 1', run this following prompt to check which pages have been accessed:
-```bash
-pageAccessTest
-```
 
-if you want to print page table just go with vmprint
-example: 
-    wc README (not show page table)
-=>  vmprint wc README (show page table)
+
