@@ -142,8 +142,7 @@ for (int i = 0; argv[i]; i++)
   p->trapframe->a1 = sp;
 
   // Print page table if flag != 0
-  if(print_pgt)
-    vmprint(p->pagetable);
+
 
 
 
@@ -161,6 +160,9 @@ for (int i = 0; argv[i]; i++)
   p->trapframe->sp = sp; // initial stack pointer
   proc_freepagetable(oldpagetable, oldsz);
 
+  if(print_pgt)
+  vmprint(p->pagetable);
+  
   // vmprint(p->pagetable);
   return argc; // this ends up in a0, the first argument to main(argc, argv)
 

@@ -471,11 +471,11 @@ void vmPrintRec(pagetable_t pageTable, int level) {
               printf("\n");
               vmPrintRec((pagetable_t)pa, level + 1); // Recursively go to a next-level page table
           }
-          else
+          else // this is the leaf
           {     printf(" (");
-                if (pte & PTE_R) printf("R");
-                if (pte & PTE_W) printf("W");
-                if (pte & PTE_X) printf("X");
+                if (pte & PTE_R) printf("R"); // PTE_R (1  << 1) 
+                if (pte & PTE_W) printf("W"); // PTE_W (1  << 2)
+                if (pte & PTE_X) printf("X"); // PTE_X (1  << 3)
                 printf(")\n");
           }
       }
